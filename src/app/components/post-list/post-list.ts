@@ -3,10 +3,12 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Post } from '../../models/post';
 import { PostComment } from '../../models/comment';
 import { PostService } from '../../services/post.service';
+import { PostForm } from "../post-form/post-form";
+import { CommentForm } from "../comment-form/comment-form";
 
 @Component({
   selector: 'app-post-list',
-  imports: [CommonModule],
+  imports: [CommonModule, PostForm, CommentForm],
   templateUrl: './post-list.html',
   styleUrl: './post-list.scss'
 })

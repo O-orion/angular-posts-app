@@ -44,12 +44,17 @@
     </table>
   </div>
 
-  <div *ngIf="showModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 ">
-      <div class="bg-white p-8 rounded-xl shadow-2x1 w-full max-w-md ">
-        <app-post-list></app-post-list>
-      </div>
+  <div *ngIf="showModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+      <app-post-form [post]="selectedPost" (save)="savePost($event)" (cancel)="closeModal()"></app-post-form>
+    </div>
   </div>
 
+  <div *ngIf="showComment" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+      <app-comment-form [comment]="selectedComment" [postId]="selectedPostId!" (save)="saveComment($event)" (cancel)="closeCommentModal()"></app-comment-form>
+    </div>
+  </div>
 
 
 </div>
