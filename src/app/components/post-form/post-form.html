@@ -1,0 +1,19 @@
+<div>
+  <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ post ? 'Editar' : 'Criar' }} Post</h2>
+  <form (ngSubmit)="onSubmit()">
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Título</label>
+      <input [(ngModel)]="postData.title" name="title" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500" required>
+      <p *ngIf="errors.title" class="text-red-500 text-sm mt-1">{{ errors.title }}</p>
+    </div>
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Corpo</label>
+      <textarea [(ngModel)]="postData.body" name="body" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500" rows="5" required></textarea>
+      <p *ngIf="errors.body" class="text-red-500 text-sm mt-1">{{ errors.body }}</p>
+    </div>
+    <div class="flex justify-end space-x-2">
+      <button type="button" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600" (click)="canceled()">Cancelar</button>
+      <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">Salvar</button>
+    </div>
+  </form>
+</div>

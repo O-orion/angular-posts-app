@@ -90,6 +90,58 @@ export class PostList implements OnInit {
     }
   }
 
-  
+  toggleComments(postId: number): void {
+    this.showComments[postId] = !this.showComments[postId];
+    if(this.showComments[postId]) {
+      this.postService.getComments(postId).subscribe({
+        next: () => {},
+        error: (error) => {
+          console.log("Erro ao consulta comentários ", error)
+        }
+      })
+    }
+  }
+
+  openCommentModal(postId: number): void {
+    this.selectedComment = null;
+    this.selectedPostId = postId;
+    this.showComment = true;
+  }
+
+  openEditCommentModal(comment: PostComment, postId: number): void {
+    this.selectedComment = { ...comment };
+    this.selectedPostId = postId;
+    this.showComment = true;
+  }
+
+  closeCommentModal(): void {
+    this.showComment = false;
+    this.selectedComment = null;
+    this.selectedPostId = null;
+  }
+
+  saveComment(comment: PostComment): void {
+    if (comment.id) {
+      this.postService.updateComment(comment).subscribe({
+        next: () => this.loadPosts(),
+        error: (error) => console.error('Erro ao atualizar comentário:', error),
+      });
+    } else {
+      this.postService.createComment(comment).subscribe({
+        next: () => this.loadPosts(),
+        error: (error) => console.error('Erro ao criar comentário:', error),
+      });
+    }
+    this.closeCommentModal();
+  }
+
+    deleteComment(commentId: number, postId: number): void {
+    if (confirm('Tem certeza que deseja excluir este comentário?')) {
+      this.postService.deleteComment(commentId, postId).subscribe({
+        next: () => this.loadPosts(),
+        error: (error) => console.error('Erro ao excluir comentário:', error),
+      });
+    }
+  }
 
 }

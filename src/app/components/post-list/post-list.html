@@ -22,7 +22,7 @@
             <td class="border  p-3  space--y-2">
               <button class="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600" (click)="openEditModal(post)">Editar</button>
               <button class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600" (click)="deletePost(post.id!)">Remover</button>
-              <button class="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600" (click)="deletePost(post.id!)">
+              <button class="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600" (click)="toggleComments(post.id!)">
                 {{ showComments[post.id!] ? 'Ocultar' : 'Mostrar' }} Comentários
               </button>
                           <div *ngIf="showComments[post.id!]" class="mt-2 p-4 bg-gray-100 rounded-lg">
@@ -46,7 +46,7 @@
 
   <div *ngIf="showModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 ">
       <div class="bg-white p-8 rounded-xl shadow-2x1 w-full max-w-md ">
-        <button (click)="closeModal()" >fechar</button>
+        <app-post-list></app-post-list>
       </div>
   </div>
 
