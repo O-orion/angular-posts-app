@@ -2,10 +2,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Post } from '../../models/post';
 import { PostComment } from '../../models/comment';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-post-table',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    LucideAngularModule
+  ],
   templateUrl: './post-table.html',
   styleUrl: './post-table.scss'
 })

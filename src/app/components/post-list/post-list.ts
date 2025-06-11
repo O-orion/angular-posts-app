@@ -10,11 +10,12 @@ import { PostForm } from '../post-form/post-form';
 import { CommentForm } from '../comment-form/comment-form';
 import { PostTable } from '../post-table/post-table';
 import { Modal } from '../modal/modal';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-post-list',
   standalone: true,
-  imports: [CommonModule, PostForm, CommentForm, PostTable, Modal],
+  imports: [CommonModule, PostForm, CommentForm, PostTable, Modal, LucideAngularModule],
   templateUrl: './post-list.html',
   styleUrls: ['./post-list.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
