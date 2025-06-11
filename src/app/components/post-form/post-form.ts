@@ -1,37 +1,35 @@
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Input } from '@angular/core';
 import { Post } from '../../models/post';
-import { EventEmitter } from '@angular/core';
-import { Init } from 'v8';
 
 @Component({
   selector: 'app-post-form',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './post-form.html',
-  styleUrl: './post-form.scss'
+  styleUrls: ['./post-form.scss'],
 })
 export class PostForm implements OnInit {
-
-  @Input() post: Post| null = null;
+  @Input() post: Post | null = null;
   @Output() save = new EventEmitter<Post>();
   @Output() cancel = new EventEmitter<void>();
 
   postData: Post = {
     title: '',
     body: '',
-    comments: []
-  }
+    comments: [],
+  };
 
   errors: {
-    title?: string, body?: string
+    title?: string;
+    body?: string;
   } = {};
 
   ngOnInit(): void {
-      if(this.post) {
-        this.postData = {...this.post};
-      }
+    if (this.post) {
+      this.postData = { ...this.post };
+    }
   }
 
   validate(): boolean {
@@ -46,7 +44,7 @@ export class PostForm implements OnInit {
   }
 
   onSubmit(): void {
-    if(this.validate()) {
+    if (this.validate()) {
       this.save.emit(this.postData);
     }
   }
@@ -54,5 +52,4 @@ export class PostForm implements OnInit {
   canceled(): void {
     this.cancel.emit();
   }
-
 }

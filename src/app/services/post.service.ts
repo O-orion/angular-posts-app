@@ -120,7 +120,7 @@ export class PostService {
           post.id === comment.postId
             ? {
                 ...post,
-                comments: post.comments.map((c) => (c.id === updatedComment.id ? updatedComment : c)),
+                comments: (post.comments ?? []).map((c) => (c.id === updatedComment.id ? updatedComment : c)),
               }
             : post
         );
@@ -137,7 +137,7 @@ export class PostService {
       tap(() => {
         this.posts = this.posts.map((post) =>
           post.id === postId
-            ? { ...post, comments: post.comments.filter((c) => c.id !== commentId) }
+            ? { ...post, comments: (post.comments ?? []).filter((c) => c.id !== commentId) }
             : post
         );
       }),

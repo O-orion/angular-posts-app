@@ -1,29 +1,29 @@
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PostComment } from '../../models/comment';
 
 @Component({
   selector: 'app-comment-form',
-   imports: [CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './comment-form.html',
-  styleUrl: './comment-form.scss'
+  styleUrls: ['./comment-form.scss'],
 })
-export class CommentForm {
-  
+export class CommentForm implements OnInit {
   @Input() comment: PostComment | null = null;
   @Input() postId: number | null = null;
   @Output() save = new EventEmitter<PostComment>();
   @Output() cancel = new EventEmitter<void>();
 
-  commentData: PostComment = { id: 0, postId: 0, name: '', email: '', body: '' };
+  commentData: PostComment = { postId: 0, name: '', email: '', body: '' };
   errors: { name?: string; email?: string; body?: string } = {};
 
   ngOnInit(): void {
     if (this.comment) {
       this.commentData = { ...this.comment };
-    } else if (this.postId) {
-      this.commentData.postId = this.postId;
+    } else if (this.postId !== null) {
+      this.commentData = { postId: this.postId, name: '', email: '', body: '' };
     }
   }
 

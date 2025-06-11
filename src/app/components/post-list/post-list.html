@@ -1,20 +1,20 @@
 <div class="container mx-auto p-6 bg-gray-50 min-h-screen font-sans">
   <div class="flex justify-between items-center mb-8">
-    <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">Lista de Posts</h1>
+    <h1 class="text-xl font-bold">Lista de Posts</h1>
     <button
       (click)="openCreateModal()"
-      class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-full hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-md flex items-center space-x-2"
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center gap-2"
     >
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        <path stroke-linecap="round" stroke-width="2" d="M12 4v16m8-8H4" />
       </svg>
-      <span>Novo Post</span>
+      Novo Post
     </button>
   </div>
 
   <app-post-table
-    [posts]="posts"
-    [showComments]="showComments"
+    [posts]="(posts$ | async) ?? []"
+    [showComments]="(showComments$ | async) ?? {}"
     (editPost)="openEditModal($event)"
     (deletePost)="deletePost($event)"
     (toggleComments)="toggleComments($event)"
@@ -23,64 +23,36 @@
     (deleteComment)="deleteComment($event)"
   ></app-post-table>
 
-  <div
-    *ngIf="showModal"
-    class="fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-50 transition-opacity duration-300"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modal-post-title"
-  >
-    <div
-      class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-lg transform transition-all duration-300 scale-100"
-    >
-      <div class="flex justify-between items-center mb-6">
-        <h2 id="modal-post-title" class="text-2xl font-bold text-gray-900">
-          {{ selectedPost ? 'Editar' : 'Criar' }} Post
-        </h2>
-        <button
-          (click)="closeModal()"
-          class="text-gray-500 hover:text-gray-700 transition-colors duration-200"
-          aria-label="Fechar modal"
-        >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-      <app-post-form [post]="selectedPost" (save)="savePost($event)" (cancel)="closeModal()"></app-post-form>
-    </div>
-  </div>
+  <ng-container *ngIf="modal$ | async as modal">
+    <ng-container *ngIf="isPostModal(modal)">
+      <app-modal
+        [isOpen]="modal.isOpen"
+        [title]="modal.data ? 'Editar Post' : 'Novo Post'"
+        titleId="modal-post-title"
+        (close)="closeModal()"
+      >
+        <app-post-form
+          [post]="modal.data"
+          (save)="savePost($event)"
+          (cancel)="closeModal()"
+        ></app-post-form>
+      </app-modal>
+    </ng-container>
 
-  <div
-    *ngIf="showComment"
-    class="fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-50 transition-opacity duration-300"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modal-comment-title"
-  >
-    <div
-      class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-lg transform transition-all duration-300 scale-100"
-    >
-      <div class="flex justify-between items-center mb-6">
-        <h2 id="modal-comment-title" class="text-2xl font-bold text-gray-900">
-          {{ selectedComment ? 'Editar' : 'Criar' }} Comentário
-        </h2>
-        <button
-          (click)="closeCommentModal()"
-          class="text-gray-500 hover:text-gray-700 transition-colors duration-200"
-          aria-label="Fechar modal"
-        >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-      <app-comment-form
-        [comment]="selectedComment"
-        [postId]="selectedPostId!"
-        (save)="saveComment($event)"
-        (cancel)="closeCommentModal()"
-      ></app-comment-form>
-    </div>
-  </div>
+    <ng-container *ngIf="isCommentModal(modal)">
+      <app-modal
+        [isOpen]="modal.isOpen"
+        [title]="modal.data ? 'Editar Comentário' : 'Novo Comentário'"
+        titleId="modal-comment-title"
+        (close)="closeModal()"
+      >
+        <app-comment-form
+          [comment]="modal.data"
+          [postId]="modal.postId ?? null"
+          (save)="saveComment($event)"
+          (cancel)="closeModal()"
+        ></app-comment-form>
+      </app-modal>
+    </ng-container>
+  </ng-container>
 </div>

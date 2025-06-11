@@ -104,7 +104,7 @@
                       </button>
                       <button
                         class="bg-gradient-to-r from-red-400 to-red-500 text-white px-3 py-1 rounded-lg hover:from-red-500 hover:to-red-600 transition-all duration-300 text-sm"
-                        (click)="deleteComment.emit({ commentId: comment.id, postId: post.id! })"
+                        (click)="deleteComment.emit({ commentId: comment.id!, postId: post.id! })"
                         aria-label="Excluir comentário"
                       >
                         Excluir
