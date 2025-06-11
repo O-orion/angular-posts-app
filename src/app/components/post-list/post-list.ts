@@ -25,6 +25,7 @@ export class PostList implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("Olá")
     this.loadPosts();
   }
 
@@ -32,6 +33,7 @@ export class PostList implements OnInit {
 
     this.postService.getPosts().subscribe({
       next:(posts) => {
+        console.log(posts)
         this.posts = posts;
       },
       error: (error) => {

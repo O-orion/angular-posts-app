@@ -7,16 +7,22 @@
   <div class="overflow-x-auto">
     <table class="w-full border-collapse bg-white shadow-lg rounded-lg ">
       <thead>
+        <tr>
           <th class="border p-3 text-left text-gray-700">ID</th>
           <th class="border p-3 text-left text-gray-700">Título</th>
           <th class="border p-3 text-left text-gray-700">Corpo</th>
           <th class="border p-3 text-left text-gray-700">Ações</th>
+        </tr>
       </thead>
       <tbody>
           <tr class="hover:bg-gray-50" *ngFor="let post of posts">
             <td class="border p-3">{{ post.id }}</td>
             <td class="border p-3">{{ post.title }}</td>
             <td class="border p-3">{{ post.body }}</td>
+            <td class="border  p-3  space--y-2">
+              <button class="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600" (click)="openEditModal(post)">Editar</button>
+              <button class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600" (click)="deletePost(post.id!)">Remover</button>
+            </td>
           </tr>
       </tbody>
     </table>
@@ -28,6 +34,6 @@
       </div>
   </div>
 
-  
+
 
 </div>
