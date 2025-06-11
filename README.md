@@ -1,59 +1,38 @@
 # AngularPostsApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.1.
+Aplicação desenvolvida como parte de um teste técnico com foco em Angular moderno (versão standalone), utilizando boas práticas, componentes desacoplados, estilização com Tailwind CSS e integração com a API pública [JSONPlaceholder](https://jsonplaceholder.typicode.com/posts).
 
-## Development server
+## 📌 Funcionalidades
 
-To start a local development server, run:
+- CRUD completo de **Posts** (criar, listar, editar, excluir)
+- Modal para criação e edição de posts
+- Sincronização dos dados via gerenciamento **in memory**
+- Relacionamento entre **Posts e Comentários**
+  - CRUD completo de comentários
+  - Visualização e manipulação dos comentários por post
+- Estilização com **Tailwind CSS**
+- Ícones modernos utilizando **Lucide Angular**
+- Tratamento de erros utilizando `subscribe` em todas as requisições HTTP
+- Código modular e organizado com **Standalone Components**
+- Suporte a **Server Side Rendering (SSR)** com `@angular/ssr` e `Express`
 
-```bash
-ng serve
-```
+## 🚀 Tecnologias Utilizadas
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Angular 20 (Standalone)
+- RxJS
+- Tailwind CSS
+- Lucide Angular
+- Ngx-Toastr
+- Express
 
-## Code scaffolding
+## 🖥️ Como executar o projeto
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Requisitos
 
-```bash
-ng generate component component-name
-```
+- Node.js 18 ou superior
+- Angular CLI 20+
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Instalação
 
 ```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+npm install
