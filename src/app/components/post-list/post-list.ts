@@ -5,10 +5,11 @@ import { PostComment } from '../../models/comment';
 import { PostService } from '../../services/post.service';
 import { PostForm } from "../post-form/post-form";
 import { CommentForm } from "../comment-form/comment-form";
+import { PostTable } from '../post-table/post-table';
 
 @Component({
   selector: 'app-post-list',
-  imports: [CommonModule, PostForm, CommentForm],
+  imports: [CommonModule, PostForm, CommentForm, PostTable],
   templateUrl: './post-list.html',
   styleUrl: './post-list.scss'
 })
@@ -112,7 +113,7 @@ export class PostList implements OnInit {
     this.showComment = true;
   }
 
-  openEditCommentModal(comment: PostComment, postId: number): void {
+  openEditCommentModal({ comment, postId }: { comment: PostComment; postId: number }): void {
     this.selectedComment = { ...comment };
     this.selectedPostId = postId;
     this.showComment = true;
@@ -139,7 +140,7 @@ export class PostList implements OnInit {
     this.closeCommentModal();
   }
 
-    deleteComment(commentId: number, postId: number): void {
+  deleteComment({ commentId, postId }: { commentId: number; postId: number }): void {
     if (confirm('Tem certeza que deseja excluir este comentário?')) {
       this.postService.deleteComment(commentId, postId).subscribe({
         next: () => this.loadPosts(),
