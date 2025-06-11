@@ -1,3 +1,4 @@
+// src/app/services/post.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
@@ -13,20 +14,20 @@ export class PostService {
   private posts: Post[] = [];
 
   constructor(private http: HttpClient) {
-    this.loadPosts();
+    this.initializePosts();
   }
 
-  private loadPosts(): void {
+  private initializePosts(): void {
     this.http.get<Post[]>(`${this.apiUrl}/posts`).subscribe({
       next: (posts) => {
         this.posts = posts.map((post) => ({ ...post, comments: [] }));
       },
-      error: (error) => console.error('Erro ao carregar posts:', error),
+      error: (error) => console.error('Erro ao inicializar posts:', error),
     });
   }
 
   getPosts(): Observable<Post[]> {
-    return of(this.posts);
+    return of([...this.posts]);
   }
 
   getPost(id: number): Observable<Post | undefined> {
@@ -36,7 +37,8 @@ export class PostService {
   createPost(post: Post): Observable<Post> {
     return this.http.post<Post>(`${this.apiUrl}/posts`, post).pipe(
       tap((newPost) => {
-        this.posts.push({ ...newPost, comments: [] });
+        const createdPost = { ...post, id: newPost.id || this.generateId(), comments: [] };
+        this.posts = [...this.posts, createdPost];
       }),
       catchError((error) => {
         console.error('Erro ao criar post:', error);
@@ -51,10 +53,9 @@ export class PostService {
     }
     return this.http.put<Post>(`${this.apiUrl}/posts/${post.id}`, post).pipe(
       tap((updatedPost) => {
-        const index = this.posts.findIndex((p) => p.id === updatedPost.id);
-        if (index !== -1) {
-          this.posts[index] = { ...updatedPost, comments: this.posts[index].comments };
-        }
+        this.posts = this.posts.map((p) =>
+          p.id === post.id ? { ...updatedPost, comments: p.comments } : p
+        );
       }),
       catchError((error) => {
         console.error('Erro ao atualizar post:', error);
@@ -78,10 +79,9 @@ export class PostService {
   getComments(postId: number): Observable<PostComment[]> {
     return this.http.get<PostComment[]>(`${this.apiUrl}/posts/${postId}/comments`).pipe(
       tap((comments) => {
-        const post = this.posts.find((p) => p.id === postId);
-        if (post) {
-          post.comments = comments || [];
-        }
+        this.posts = this.posts.map((post) =>
+          post.id === postId ? { ...post, comments: comments || [] } : post
+        );
       }),
       catchError((error) => {
         console.error('Erro ao carregar comentários:', error);
@@ -93,10 +93,14 @@ export class PostService {
   createComment(comment: PostComment): Observable<PostComment> {
     return this.http.post<PostComment>(`${this.apiUrl}/comments`, comment).pipe(
       tap((newComment) => {
-        const post = this.posts.find((p) => p.id === comment.postId);
-        if (post) {
-          post.comments = [...post.comments, newComment];
-        }
+        this.posts = this.posts.map((post) =>
+          post.id === comment.postId
+            ? {
+                ...post,
+                comments: [...(post.comments || []), { ...newComment, id: newComment.id || this.generateId() }],
+              }
+            : post
+        );
       }),
       catchError((error) => {
         console.error('Erro ao criar comentário:', error);
@@ -111,15 +115,14 @@ export class PostService {
     }
     return this.http.put<PostComment>(`${this.apiUrl}/comments/${comment.id}`, comment).pipe(
       tap((updatedComment) => {
-        const post = this.posts.find((p) => p.id === comment.postId);
-        if (post) {
-          const index = post.comments.findIndex((c: PostComment) => c.id === updatedComment.id);
-          if (index !== -1) {
-            post.comments[index] = updatedComment;
-          } else {
-            console.warn(`Comentário com ID ${updatedComment.id} não encontrado`);
-          }
-        }
+        this.posts = this.posts.map((post) =>
+          post.id === comment.postId
+            ? {
+                ...post,
+                comments: post.comments.map((c) => (c.id === updatedComment.id ? updatedComment : c)),
+              }
+            : post
+        );
       }),
       catchError((error) => {
         console.error('Erro ao atualizar comentário:', error);
@@ -131,15 +134,20 @@ export class PostService {
   deleteComment(commentId: number, postId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/comments/${commentId}`).pipe(
       tap(() => {
-        const post = this.posts.find((p) => p.id === postId);
-        if (post) {
-          post.comments = post.comments.filter((c: PostComment) => c.id !== commentId);
-        }
+        this.posts = this.posts.map((post) =>
+          post.id === postId
+            ? { ...post, comments: post.comments.filter((c) => c.id !== commentId) }
+            : post
+        );
       }),
       catchError((error) => {
         console.error('Erro ao excluir comentário:', error);
         throw error;
       })
     );
+  }
+
+  private generateId(): number {
+    return Math.max(0, ...this.posts.map((p) => p.id || 0)) + 1;
   }
 }

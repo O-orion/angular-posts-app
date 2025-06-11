@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Post } from '../../models/post';
 import { PostComment } from '../../models/comment';
 import { PostService } from '../../services/post.service';
@@ -20,27 +20,23 @@ export class PostList implements OnInit {
   selectedPostId: number | null = null;
   showComments: { [key: number]: boolean } = {};
 
-  constructor(private postService: PostService) {
-
-  }
+  constructor(private postService: PostService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    console.log("Olá")
     this.loadPosts();
   }
 
-  loadPosts(): void {
 
+  loadPosts(): void {
     this.postService.getPosts().subscribe({
-      next:(posts) => {
-        console.log(posts)
+      next: (posts) => {
         this.posts = posts;
+        this.cdr.markForCheck();
       },
       error: (error) => {
-        console.log("Erro ao carregar os posts " , error)
-      }
-    })
-
+        console.error('Erro ao carregar posts:', error);
+      },
+    });
   }
 
   openCreateModal(): void {
@@ -82,15 +78,16 @@ export class PostList implements OnInit {
   }
 
   deletePost(id: number): void {
-    if(confirm("Tem certeza que deseja exlcuir este post ?")) {
+    if (confirm('Tem certeza que deseja excluir este post?')) {
       this.postService.deletePost(id).subscribe({
         next: () => {
-          this.loadPosts()
+          this.posts = this.posts.filter((post) => post.id !== id);
+          this.cdr.markForCheck();
         },
         error: (error) => {
-          console.log(`Erro ao excluir post: ${error}`)
-        }
-      })
+          console.error('Erro ao excluir post:', error);
+        },
+      });
     }
   }
 
