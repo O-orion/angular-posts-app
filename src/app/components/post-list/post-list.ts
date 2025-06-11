@@ -26,7 +26,6 @@ export class PostList implements OnInit {
     this.loadPosts();
   }
 
-
   loadPosts(): void {
     this.postService.getPosts().subscribe({
       next: (posts) => {
@@ -90,5 +89,7 @@ export class PostList implements OnInit {
       });
     }
   }
+
+  
 
 }

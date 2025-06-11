@@ -22,6 +22,22 @@
             <td class="border  p-3  space--y-2">
               <button class="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600" (click)="openEditModal(post)">Editar</button>
               <button class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600" (click)="deletePost(post.id!)">Remover</button>
+              <button class="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600" (click)="deletePost(post.id!)">
+                {{ showComments[post.id!] ? 'Ocultar' : 'Mostrar' }} Comentários
+              </button>
+                          <div *ngIf="showComments[post.id!]" class="mt-2 p-4 bg-gray-100 rounded-lg">
+              <button class="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 mb-2" (click)="openCommentModal(post.id!)">Adicionar Comentário</button>
+              <ul class="space-y-2">
+                <li *ngFor="let comment of post.comments" class="border p-3 bg-white rounded">
+                  <p class="font-semibold">{{ comment.name }} <span class="text-gray-500">({{ comment.email }})</span></p>
+                  <p class="text-gray-700">{{ comment.body }}</p>
+                  <div class="mt-2 space-x-2">
+                    <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600" (click)="openEditCommentModal(comment, post.id!)">Editar</button>
+                    <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" (click)="deleteComment(comment.id!, post.id!)">Excluir</button>
+                  </div>
+                </li>
+              </ul>
+            </div>
             </td>
           </tr>
       </tbody>
