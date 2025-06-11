@@ -81,7 +81,8 @@ export class PostService {
       tap((comments) => {
         this.posts = this.posts.map((post) =>
           post.id === postId ? { ...post, comments: comments || [] } : post
-        );
+      );
+      // console.log(this.posts.filter((post) => post.id === postId))
       }),
       catchError((error) => {
         console.error('Erro ao carregar comentários:', error);

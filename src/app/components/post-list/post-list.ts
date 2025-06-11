@@ -96,7 +96,9 @@ export class PostList implements OnInit {
     this.showComments[postId] = !this.showComments[postId];
     if(this.showComments[postId]) {
       this.postService.getComments(postId).subscribe({
-        next: () => {},
+        next: (data:PostComment[]) => {
+          this.loadPosts();
+        },
         error: (error) => {
           console.log("Erro ao consulta comentários ", error)
         }
